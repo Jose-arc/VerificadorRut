@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rut Verificador</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-body">
+                        <div class="form-row">
+                                <div class="col-md-8">
+                                  <input type="text" id="rut" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                  <input type="text" id="digito" class="form-control">
+                                </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-default" data-dismiss="modal">cerrar</button> -->
+                  <button type="button" class="btn btn-primary" onclick="Calcular()">Verificar</button>
+                </div>
+              </div>
+            </div>
+    </div>
+
+    <script>
+        function Calcular() {
+            var rut = document.getElementById('rut').value;
+            var digito = document.getElementById('digito').value;
+
+            let rutarray = [];
+            let muliplicacion = [];
+            let a = 2;
+           
+            //Este for permite desglosar el rut numero por numero y agregarlo a un array Ej: '19944934' -> [1,9,9,4,..]
+                for (let i = 0; i < rut.length; i++) {
+                    
+                    rutarray.push(rut.charAt(i));           
+                }
+
+                //Esta funcion permite voltear el array 
+                rutarray.reverse();
+
+                //Este for multiplica cada numero del array con la formula de 11 
+                for (let b = 0; b < rutarray.length; b++) {
+                    
+                    var n;
+
+                    if(a <= 7){
+
+                        n = rutarray[b]*a;
+                        muliplicacion.push(n);
+                        //console.log(rutarray[b]+"*"+a+" = "+n);
+                         a++;
+
+
+                    }else{
+                        
+                        a = 2;
+                        n = rutarray[b]*a;   
+                        muliplicacion.push(n);                 
+                        //console.log(rutarray[b]+"*"+a+" = "+n);
+                        a++;
+                    }
+
+                }
+
+                //FUNCION QUE PERMITE SUMAR TODOS LOS VALORES DENTRO DE UN ARRAY
+                var total = muliplicacion.reduce(function(a,b){ return a + b ;});
+                //END
+
+                //OBTENER EL RESTO DE LA DIVICION
+                var resto = (total % 11);
+                //END
+
+                //REGLA DE 11 PARA VERIFICAR RUT DICE QUE TIENES QUE RESTAR 11 - EL RESTO DE LA DIVICION
+                var digito_verificador = (11 - resto);
+                //END
+
+
+                //CONDICIONES 11 = 0 y 10 = K
+                
+                if (digito == digito_verificador) 
+                {
+
+                    swal("Verificado", "Rut Correcto", "success");
+                    LimpiarCasillas();
+
+                }
+                else
+                {
+                    if(digito = '0' && digito_verificador == 11){
+    
+                        swal("Verificado", "Rut Correcto", "success");
+                        LimpiarCasillas();
+
+                    }
+                    else if(String(digito.toLowercase == 'k') && digito_verificador == 10){
+                        
+                        swal("Verificado", "Rut Correcto", "success");
+                        LimpiarCasillas();
+                    
+                    }
+                    else{
+
+                        swal("Verificado", "Rut Incorrecto", "error");
+                        LimpiarCasillas();
+
+                    }
+                }
+            
+        }
+        
+    </script>
+
+    <script>
+        function LimpiarCasillas(){
+            var rut = document.getElementById('rut').value = '';
+            var digito = document.getElementById('digito').value = '';
+        }
+    </script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    $(window).on('load',function(){
+        $('#myModal').modal('show');
+    });
+</script>
+</body>
+</html>
+
+<!--Made by Nacho-->
